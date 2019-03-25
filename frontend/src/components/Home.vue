@@ -303,7 +303,6 @@
                 return(item => {
                     for(let i = 0; i < Object.keys(career).length; i++){
                         let tmp = Object.keys(career)[i];
-                        // console.log(career);
                         if(item['career'] == tmp && career[tmp]){
                             to.push(item);
                         }
@@ -332,7 +331,6 @@
                 else{
                     tmp3 = tmp2;
                 }
-                // tmp2 = Object.keys(careers).length > 0 ? cources.forEach(this.getMarkedStuff(tmp1, years, 'year')) : cources;
                 return tmp3;
             },
             verifyTrue(list){
@@ -342,6 +340,26 @@
                     result |= list[tmp];
                 }
                 return result;
+            },
+            verifyMarked(list){
+                let result = false;
+                for(let i = 0; i < list; i++){
+                    if (list[i].hasOwnProperty('isMarked') && list[i].isMarked) {
+                        result = true;
+                        break;
+                    }
+                }
+                return result;
+            },
+            getAllMarkedForMarkedData(marked, list){
+                if (this.verifyMarked(marked)){
+                    marked.forEach(this.getMarkedData(list));
+                    console.log('Entreeee');
+                }
+                else{
+                    console.log('No tengo marcados');
+                    marked.forEach(item => {list.push(item.id);});
+                }
             },
             makeQuery() {
                 this.m_careers = {};
@@ -357,7 +375,8 @@
                 let toSendUsers = [];
                 let toSendStartDate = null;
                 let toSendEndDate = null;
-                this.marked.forEach(this.getMarkedData(toSendCourses));
+                // this.marked.forEach(this.getMarkedData(toSendCourses));
+                this.getAllMarkedForMarkedData(this.marked, toSendCourses);
                 this.tags.forEach(this.getMarkedData(toSendTags));
                 this.groups.forEach(this.getMarkedData(toSendGroups));
                 this.locals.forEach(this.getMarkedData(toSendLocals));
