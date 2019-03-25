@@ -205,8 +205,6 @@
                 this.loadFrom('locals');
                 this.loadFrom('resources');
                 this.loadFrom('tags');
-                // this.loadAdditionals('year',this.courses,this.years);
-                // this.loadAdditionals('semester',this.courses,this.semesters);
             },
             loadFrom(arg) {
                 this.$store.state.profile.loadMinData();
@@ -220,6 +218,7 @@
                 let token = this.$store.state.profile.data.token;
                 this.$store.state.courses.getData(token).then(result => {
                     this.courses = this.$store.state.courses.data;
+                    this.marked = this.$store.state.courses.data;
                     this.courses.forEach(item => {
                         if(item['career'] !== null) {
                             let insert = true;
@@ -269,31 +268,11 @@
                                 this.semesters.push({ name: 'Anual', val: 0 });
                             }
                         }
-
                     });
-                    // let tmp = new Set(this.careers);
-                    // let tmp1 = new Set(this.years);
-                    // let tmp2 = new Set(this.semesters);
-                    // this.careers = tmp;
-                    // this.years = tmp1;
-                    // this.semesters = tmp2;
-                    // let tmp4 = [];
-                    // this.courses.forEach(this.getMarkedYears(tmp4,this.m_years));
-                    // console.log(tmp4);
-                    //console.log(this.careers);
                 });
             },
             tmp(){
                 this.marked = this.getAllMarked(this.m_careers,this.m_years, this.m_semesters, this.courses);
-                // console.log(Object.keys(this.m_careers).length);
-                // console.log(this.m_years);
-                // console.log(this.m_semesters);
-                // let tmp = [];
-                //this.courses.forEach(this.getMarkedStuff(tmp,this.m_careers,'career'));
-                // this.courses.forEach(this.getMarkedCareers(tmp,this.m_careers));
-                // console.log(tmp);
-                // console.log(this.getAllMarked(this.m_careers,this.m_years, this.m_semesters, this.courses));
-                // console.log(this.verifyTrue(this.m_careers));
             },
             updateData(list, val){
                 if(this[list][val] === true){
@@ -302,14 +281,6 @@
                 else{
                     this[list][val] = true;
                 }
-            },
-            loadAdditionals(arg, list){
-                let tmp = [];
-                for(let i = 0; i < list.lenght; i++){
-                    tmp.push(list[i][arg]);
-                    console.log(list[i][arg]);
-                }
-                return tmp;
             },
             getMarkedData(to) {
                 return (item => {
@@ -386,7 +357,7 @@
                 let toSendUsers = [];
                 let toSendStartDate = null;
                 let toSendEndDate = null;
-                this.courses.forEach(this.getMarkedData(toSendCourses));
+                this.marked.forEach(this.getMarkedData(toSendCourses));
                 this.tags.forEach(this.getMarkedData(toSendTags));
                 this.groups.forEach(this.getMarkedData(toSendGroups));
                 this.locals.forEach(this.getMarkedData(toSendLocals));
@@ -411,15 +382,6 @@
             },
             eventSelected(event, jsEvent, view) {
                 this.$router.push({name: 'eventPage', params: {eventId: event.id}});
-            },
-            setMarked(list, name){
-                for(let i = 0; i < list.length; i++){
-                    if(list[i].name === name){
-                        let tmp = list[i].isMarked;
-                        list[i].isMarked = !tmp;
-                        break;
-                    }
-                }
             }
         },
         created() {
